@@ -355,6 +355,24 @@ class CollectionGenerator extends ParserGenerator<void, Data, Collection> {
             .allFields(
               hasFreezed: hasFreezed,
               freezedConstructors: redirectedFreezedConstructors,
+
+/*         ...collectionTargetElement.fields
+            .where((f) => f.isPublic)
+            .where(
+              (f) =>
+                  f.type.isDartCoreString ||
+                  f.type.isDartCoreNum ||
+                  f.type.isDartCoreInt ||
+                  f.type.isDartCoreDouble ||
+                  f.type.isDartCoreBool ||
+                  f.type.element2?.kind == ElementKind.ENUM ||
+                  f.type.isPrimitiveList ||
+                  f.type.isJsonDocumentReference ||
+                  _dateTimeChecker.isAssignableFromType(f.type) ||
+                  _timestampChecker.isAssignableFromType(f.type) ||
+                  _geoPointChecker.isAssignableFromType(f.type),
+              // TODO filter list other than LIst<string|bool|num>
+*/
             )
             .where((f) => f.isPublic)
             .where((f) => _isSupportedType(f.type))
@@ -405,6 +423,47 @@ class CollectionGenerator extends ParserGenerator<void, Data, Collection> {
     ''';
 
     yield '''
+
+List<String>? _enumConvertList(enumList) {
+  if (enumList == null) { return null; }
+  List<String> _tmpEnumList =[];
+  enumList.forEach((Enum e) {
+    _tmpEnumList.add(e.name);
+  });
+  return (_tmpEnumList.length > 0) ? _tmpEnumList : null;
+}
+
+List<Map<String, String>>? _enumConvertListMap(enumListMap) {
+  if (enumListMap == null) {
+    return null;
+  }
+  List<Map<String, String>> _tmpEnumListMap = [];
+
+  for (var e in enumListMap) {
+    e.forEach((Enum k, v) {
+      // TODO: Test for an enum key or enum value
+      // var _k = (k is Enum) ? k.name : k;
+      // var _v = (v is Enum) ? v.name : v;
+      var _k = k.name;
+      var _v = v;
+      _tmpEnumListMap.add({_k: _v});
+    });
+  };
+  return (_tmpEnumListMap.length > 0) ? _tmpEnumListMap : null;
+}
+
+Map<String, dynamic>? _enumConvertMap(enumMap) {
+  if (enumMap == null) {
+    return null;
+  }
+  Map<String, dynamic> _tmpEnumMap = {};
+
+  enumMap?.forEach((Enum k, v) {
+    _tmpEnumMap.addAll({k.name: v});
+  });
+  return (_tmpEnumMap.length > 0) ? _tmpEnumMap : null;
+}
+
 class _Sentinel {
   const _Sentinel();
 }
@@ -489,6 +548,8 @@ extension on DartType {
         generic.isDartCoreString ||
         generic.isDartCoreBool ||
         generic.isDartCoreObject ||
+        generic.element2?.kind == ElementKind.ENUM ||
+        generic.isDartCoreMap ||
         generic.isDynamic;
   }
 }
