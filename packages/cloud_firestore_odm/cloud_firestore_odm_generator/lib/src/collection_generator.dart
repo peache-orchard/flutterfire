@@ -355,24 +355,6 @@ class CollectionGenerator extends ParserGenerator<void, Data, Collection> {
             .allFields(
               hasFreezed: hasFreezed,
               freezedConstructors: redirectedFreezedConstructors,
-
-/*         ...collectionTargetElement.fields
-            .where((f) => f.isPublic)
-            .where(
-              (f) =>
-                  f.type.isDartCoreString ||
-                  f.type.isDartCoreNum ||
-                  f.type.isDartCoreInt ||
-                  f.type.isDartCoreDouble ||
-                  f.type.isDartCoreBool ||
-                  f.type.element2?.kind == ElementKind.ENUM ||
-                  f.type.isPrimitiveList ||
-                  f.type.isJsonDocumentReference ||
-                  _dateTimeChecker.isAssignableFromType(f.type) ||
-                  _timestampChecker.isAssignableFromType(f.type) ||
-                  _geoPointChecker.isAssignableFromType(f.type),
-              // TODO filter list other than LIst<string|bool|num>
-*/
             )
             .where((f) => f.isPublic)
             .where((f) => _isSupportedType(f.type))
@@ -407,6 +389,7 @@ class CollectionGenerator extends ParserGenerator<void, Data, Collection> {
         type.isDartCoreInt ||
         type.isDartCoreDouble ||
         type.isDartCoreBool ||
+        type.element2?.kind == ElementKind.ENUM ||
         type.isPrimitiveList ||
         type.isJsonDocumentReference ||
         _dateTimeChecker.isAssignableFromType(type) ||
