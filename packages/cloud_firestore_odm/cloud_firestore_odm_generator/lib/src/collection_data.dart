@@ -347,6 +347,9 @@ represents the content of the collection must be in the same file.
         type.isDartCoreDouble ||
         type.isDartCoreBool ||
         type.isPrimitiveList ||
+        type.isDartCoreList ||
+        type.isDartCoreEnum ||
+        type.element?.kind == ElementKind.ENUM ||
         type.isJsonDocumentReference ||
         dateTimeChecker.isAssignableFromType(type) ||
         timestampChecker.isAssignableFromType(type) ||
