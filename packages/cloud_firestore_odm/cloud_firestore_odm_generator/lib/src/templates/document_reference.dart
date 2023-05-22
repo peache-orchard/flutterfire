@@ -160,18 +160,26 @@ void transactionUpdate(Transaction transaction, {${parameters.join()}});
     var json = <String>[];
 
     for (final field in data.updatableFields) {
-      if (FieldEnum(field).isEnumList) {
+      final param = FieldEnum(field);
+      if (param.isEnumList) {
         json.add(
           """
           if (${field.name} != _sentinel)
             '${field.name}': _enumConvertList(${field.name} as ${field.type}),
           """,
         );
-      } else if (FieldEnum(field).isEnumListMap) {
+      } else if (param.isEnumListMap) {
         json.add(
           """
           if (${field.name} != _sentinel)
             '${field.name}': _enumConvertListMap(${field.name} as ${field.type}),
+          """,
+        );
+      } else if (param.isEnum) {
+        json.add(
+          """
+          if (${field.name} != _sentinel)
+            '${field.name}': (${field.name} as ${field.type}).name as String,
           """,
         );
       } else {
