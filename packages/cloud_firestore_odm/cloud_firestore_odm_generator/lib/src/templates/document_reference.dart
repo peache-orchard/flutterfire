@@ -2,7 +2,61 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
+
 import '../collection_data.dart';
+import '../collection_generator.dart';
+
+class FieldEnum {
+  FieldEnum(this.field) {
+    _isEnum = field.type.element2?.kind == ElementKind.ENUM;
+
+    if (field.type.isDartCoreList) {
+      final _typeArguments = (field.type as InterfaceType).typeArguments;
+      for (final subType in _typeArguments) {
+        if (subType.isDartCoreMap) {
+          // We have something like this: Map<CastType, String>
+          // TODO: Need to get the subtypes of subtype. In this case CastTYpe
+          // and then test it to see if it is an Enum
+
+          final _mapTypeArguments = (subType as InterfaceType).typeArguments;
+          for (final subSubType in _mapTypeArguments) {
+            if (subSubType.element2?.kind == ElementKind.ENUM) {
+              _isEnumListMap = true;
+              break;
+            }
+            // _isEnumListMap = subSubType.element2?.kind == ElementKind.ENUM;
+          }
+        } else if (subType.element2?.kind == ElementKind.ENUM) {
+          _isEnumList = true;
+        }
+      }
+    } else if (field.type.isDartCoreMap) {
+      final _mapTypeArguments = (field.type as InterfaceType).typeArguments;
+      for (final subSubType in _mapTypeArguments) {
+        if (subSubType.element2?.kind == ElementKind.ENUM) {
+          _isEnumMap = true;
+          break;
+        }
+      }
+    }
+  }
+
+  QueryingField field;
+  var _isEnumList = false;
+  var _isEnumListMap = false;
+  var _isEnumMap = false;
+  var _isEnum = false;
+
+  bool get isEnumList => _isEnumList;
+
+  bool get isEnumListMap => _isEnumListMap;
+
+  bool get isEnumMap => _isEnumMap;
+
+  bool get isEnum => _isEnum;
+}
 
 class DocumentReferenceTemplate {
   DocumentReferenceTemplate(this.data);
@@ -60,7 +114,7 @@ class _\$${data.documentReferenceName}
     return transaction.get(reference).then(${data.documentSnapshotName}._);
   }
 
-  ${_update(data)} 
+  ${_update(data)}
 
   ${_equalAndHashCode(data)}
 }
@@ -103,18 +157,32 @@ void transactionUpdate(Transaction transaction, {${parameters.join()}});
     ];
 
     // TODO support nested objects
-    final json = [
-      for (final field in data.updatableFields) ...[
-        '''
-        if (${field.name} != _sentinel)
-          ${field.field}: ${field.name} as ${field.type},
-        ''',
-        '''
-        if (${field.name}FieldValue != null)
-          ${field.field}: ${field.name}FieldValue ,
-        '''
-      ],
-    ];
+    var json = <String>[];
+
+    for (final field in data.updatableFields) {
+      if (FieldEnum(field).isEnumList) {
+        json.add(
+          """
+          if (${field.name} != _sentinel)
+            '${field.name}': _enumConvertList(${field.name} as ${field.type}),
+          """,
+        );
+      } else if (FieldEnum(field).isEnumListMap) {
+        json.add(
+          """
+          if (${field.name} != _sentinel)
+            '${field.name}': _enumConvertListMap(${field.name} as ${field.type}),
+          """,
+        );
+      } else {
+        json.add(
+          """
+          if (${field.name} != _sentinel)
+            '${field.name}': ${field.name} as ${field.type},
+          """,
+        );
+      }
+    }
 
     final asserts = [
       for (final field in data.updatableFields)

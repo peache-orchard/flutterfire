@@ -2,12 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/type_provider.dart';
 
 import '../collection_data.dart';
+import 'document_reference.dart';
 
 class QueryTemplate {
   QueryTemplate(this.data);
@@ -371,42 +371,11 @@ class ${data.queryReferenceImplName}
     final buffer = StringBuffer();
 
     for (final field in data.queryableFields) {
-      final _isEnum = field.type.element2?.kind == ElementKind.ENUM;
-      var _isEnumList = false;
-      var _isEnumListMap = false;
-      var _isEnumMap = false;
-
-      if (field.type.isDartCoreList) {
-        final _typeArguments = (field.type as InterfaceType).typeArguments;
-        for (final subType in _typeArguments) {
-          if (subType.isDartCoreMap) {
-            // We have something like this: Map<CastType, String>
-            // TODO: Need to get the subtypes of subtype. In this case CastTYpe
-            // and then test it to see if it is an Enum
-
-            final _mapTypeArguments = (subType as InterfaceType).typeArguments;
-            for (final subSubType in _mapTypeArguments) {
-              if (subSubType.element2?.kind == ElementKind.ENUM) {
-                _isEnumListMap = true;
-              }
-              // _isEnumListMap = subSubType.element2?.kind == ElementKind.ENUM;
-            }
-          } else if (subType.element2?.kind == ElementKind.ENUM) {
-            _isEnumList = true;
-          }
-        }
-      } else if (field.type.isDartCoreMap) {
-        final _mapTypeArguments = (field.type as InterfaceType).typeArguments;
-        for (final subSubType in _mapTypeArguments) {
-          if (subSubType.element2?.kind == ElementKind.ENUM) {
-            _isEnumMap = true;
-          }
-        }
-      }
       final titledNamed = field.name.replaceFirstMapped(
         RegExp('[a-zA-Z]'),
         (match) => match.group(0)!.toUpperCase(),
       );
+      final fieldEnum = FieldEnum(field);
 
       final nullableType =
           field.type.nullabilitySuffix == NullabilitySuffix.question
@@ -437,15 +406,15 @@ class ${data.queryReferenceImplName}
       // final parameters = operators.keys.map((e) => '$e: $e,').join();
       // final parameters = operators.keys.map((e) => '$e: $e').join(',');
       final parameters = operators.keys.map((e) {
-        if (_isEnumList) {
+        if (fieldEnum.isEnumList) {
           if (e == 'arrayContains') {
             return '$e: $e?.name';
           } else if (e == 'isNull') {
             return '$e: $e';
           } else {
-            return '$e: $e?.map((e) => e.name)';
+            return '$e: _enumConvertList($e)';
           }
-        } else if (_isEnumListMap) {
+        } else if (fieldEnum.isEnumListMap) {
           if (e == 'arrayContains') {
             return '$e: _enumConvertMap($e)';
           } else if (e == 'isNull') {
@@ -453,7 +422,7 @@ class ${data.queryReferenceImplName}
           } else {
             return '$e: _enumConvertListMap($e)';
           }
-        } else if (_isEnum) {
+        } else if (fieldEnum.isEnum) {
           if (e == 'whereIn') {
             return '$e: _whereInList';
           } else if (e == 'whereNotIn') {
@@ -463,7 +432,7 @@ class ${data.queryReferenceImplName}
           } else {
             return '$e: $e?.name';
           }
-        } else if (_isEnumMap) {
+        } else if (fieldEnum.isEnumMap) {
           // TODO fully support a Map of Enums
           return '$e: $e?.name';
         } else {
@@ -478,7 +447,7 @@ class ${data.queryReferenceImplName}
         buffer.writeln(
           '${data.queryReferenceInterfaceName} where$titledNamed({$prototype});',
         );
-      } else if (_isEnumList) {
+      } else if (fieldEnum.isEnumList) {
         buffer.writeln(
           '''
   ${data.queryReferenceInterfaceName} where$titledNamed({$prototype}) {
@@ -495,7 +464,7 @@ class ${data.queryReferenceImplName}
   }
 ''',
         );
-      } else if (_isEnumListMap) {
+      } else if (fieldEnum.isEnumListMap) {
         buffer.writeln(
           '''
   ${data.queryReferenceInterfaceName} where$titledNamed({$prototype}) {
@@ -539,7 +508,7 @@ class ${data.queryReferenceImplName}
   }
 ''',
         );
-      } else if (_isEnum) {
+      } else if (fieldEnum.isEnum) {
         buffer.writeln(
           '''
   ${data.queryReferenceInterfaceName} where$titledNamed({$prototype}) {
