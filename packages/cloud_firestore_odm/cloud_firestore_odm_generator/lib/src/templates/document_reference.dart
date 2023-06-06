@@ -203,7 +203,7 @@ void transactionUpdate(Transaction transaction, {${parameters.join()}});
 
     return '''
 Future<void> update({${parameters.join()}}) async {
-  throw UnimplementedError('You should not be using update! Make sure you're going through the backend for writes!');
+  throw UnimplementedError('You should not be using update! Make sure to go through the backend for writes!');
   $asserts
   final json = {${json.join()}};
 
