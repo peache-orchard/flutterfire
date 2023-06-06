@@ -88,7 +88,7 @@ ${_parentProperty(data)}
 
   @override
   Future<${data.documentReferenceName}> add(${data.type} value) {
-    throw UnimplementedError();
+  throw UnimplementedError('You should not be using add! Make sure you're going through the backend for writes!');
     return reference
       .add(value)
       .then((ref) => ${data.documentReferenceName}(ref));
