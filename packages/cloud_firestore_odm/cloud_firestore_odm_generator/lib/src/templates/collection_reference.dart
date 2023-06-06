@@ -41,7 +41,7 @@ abstract class ${data.collectionReferenceInterfaceName}
   ) {
     $fromFirestoreBody
   }
- 
+
   static Map<String, Object?> toFirestore(
     ${data.type} value,
     SetOptions? options,
@@ -87,7 +87,7 @@ ${_parentProperty(data)}
   }
 
   @override
-  Future<${data.documentReferenceName}> add(${data.type} value) {
+  Future<${data.documentReferenceName}> add2(${data.type} value) {
     return reference
       .add(value)
       .then((ref) => ${data.documentReferenceName}(ref));
