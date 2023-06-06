@@ -202,7 +202,8 @@ void transactionUpdate(Transaction transaction, {${parameters.join()}});
     ].join();
 
     return '''
-Future<void> update2({${parameters.join()}}) async {
+Future<void> update({${parameters.join()}}) async {
+  throw UnimplementedError();
   $asserts
   final json = {${json.join()}};
 

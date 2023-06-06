@@ -87,7 +87,8 @@ ${_parentProperty(data)}
   }
 
   @override
-  Future<${data.documentReferenceName}> add2(${data.type} value) {
+  Future<${data.documentReferenceName}> add(${data.type} value) {
+    throw UnimplementedError();
     return reference
       .add(value)
       .then((ref) => ${data.documentReferenceName}(ref));
