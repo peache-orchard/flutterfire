@@ -512,9 +512,9 @@ class ${data.queryReferenceImplName}
         buffer.writeln(
           '''
   ${data.queryReferenceInterfaceName} where$titledNamed({$prototype}) {
-    List<String>? _whereInList;
+    List<String>? _whereInList = whereIn != null ? List.empty(growable: true) : null;
     whereIn?.forEach((e) { _whereInList?.add(e.name); });
-    List<String>? _whereNotInList;
+    List<String>? _whereNotInList = whereNotIn != null ? List.empty(growable: true) : null;
     whereNotIn?.forEach((e) { _whereNotInList?.add(e.name); });
 
     return ${data.queryReferenceImplName}(
