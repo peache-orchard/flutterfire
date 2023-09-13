@@ -83,6 +83,22 @@ class CollectionGraph {
   }
 }
 
+class QueryingField {
+  QueryingField(
+    this.name,
+    this.type, {
+    required this.field,
+    required this.updatable,
+    required this.toJsonBuilder,
+  });
+
+  final String name;
+  final DartType type;
+  final String field;
+  final bool updatable;
+  final String Function(String variableName)? toJsonBuilder;
+}
+
 class CollectionData with Names {
   CollectionData({
     required this.type,
@@ -255,6 +271,7 @@ represents the content of the collection must be in the same file.
           annotatedElement.library!.typeProvider.stringType,
           field: 'FieldPath.documentId',
           updatable: false,
+          toJsonBuilder: null, // we added this peache WTF
         ),
         ...collectionTargetElement
             .allFields(
@@ -262,7 +279,7 @@ represents the content of the collection must be in the same file.
               freezedConstructors: redirectedFreezedConstructors,
             )
             .where((f) => f.isPublic)
-            .where((f) => _isSupportedType(f.type))
+            .where((f) => _isSupportedType(f.type) || hasJsonSerializable)
             .where((f) => !f.hasId())
             .where((f) => !f.isJsonIgnored())
             .map(
@@ -282,6 +299,12 @@ represents the content of the collection must be in the same file.
               e.type,
               updatable: true,
               field: key,
+              toJsonBuilder: (variableName) { // we wrote/stole this WTF
+                if (hasJsonSerializable) {
+                  return '_\$${collectionTargetElement.name.public}PerFieldToJson.${e.name}($variableName)';
+                }
+                return variableName;
+              },
             );
           },
         ).toList(),
@@ -346,6 +369,7 @@ represents the content of the collection must be in the same file.
         type.isDartCoreInt ||
         type.isDartCoreDouble ||
         type.isDartCoreBool ||
+        type.element?.kind == ElementKind.ENUM ||
         type.isPrimitiveList ||
         type.isDartCoreList ||
         type.isDartCoreEnum ||
@@ -450,6 +474,8 @@ extension on DartType {
         generic.isDartCoreString ||
         generic.isDartCoreBool ||
         generic.isDartCoreObject ||
+        generic.element?.kind == ElementKind.ENUM ||
+        generic.isDartCoreMap ||
         generic is DynamicType;
   }
 }

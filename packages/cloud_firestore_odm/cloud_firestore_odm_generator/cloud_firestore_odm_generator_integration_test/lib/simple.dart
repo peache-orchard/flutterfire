@@ -46,6 +46,7 @@ class Nested {
     required this.numList,
     required this.objectList,
     required this.dynamicList,
+    required this.enumList,
   });
 
   factory Nested.fromJson(Map<String, Object?> json) => _$NestedFromJson(json);
@@ -60,6 +61,7 @@ class Nested {
   final List<num>? numList;
   final List<Object?>? objectList;
   final List<dynamic>? dynamicList;
+  final List<SimpleEnum>? enumList;
 }
 
 @Collection<Nested>('nested')
@@ -107,6 +109,20 @@ class Root {
   final int? nullable;
 
   Map<String, Object?> toJson() => _$RootToJson(this);
+}
+
+enum SimpleEnum { enum1, enum2, enum3 }
+
+@JsonSerializable()
+class EnumTest {
+  EnumTest(this.nonNullable);
+
+  factory EnumTest.fromJson(Map<String, Object?> json) =>
+      _$EnumTestFromJson(json);
+
+  final SimpleEnum nonNullable;
+
+  Map<String, Object?> toJson() => _$EnumTestToJson(this);
 }
 
 @JsonSerializable()
@@ -191,6 +207,9 @@ class CustomClassPrefix {
   prefix: 'ThisIsACustomPrefix',
 )
 final rootRef = RootCollectionReference();
+
+@Collection<EnumTest>('enum-test')
+final enumTestRef = EnumTestCollectionReference();
 
 @JsonSerializable()
 class ExplicitPath {

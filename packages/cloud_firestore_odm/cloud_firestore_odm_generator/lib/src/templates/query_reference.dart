@@ -2,12 +2,23 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/type_provider.dart';
 
 import '../collection_data.dart';
 import 'document_reference.dart';
+
+class _WhereOperatorData {
+  _WhereOperatorData({
+    required this.type,
+    required this.toJsonBuilder,
+  });
+
+  final String type;
+  final String Function(String) toJsonBuilder;
+}
 
 class QueryTemplate {
   QueryTemplate(this.data);
@@ -287,6 +298,10 @@ class ${data.queryReferenceImplName}
         (match) => match.group(0)!.toUpperCase(),
       );
 
+      String serializeValue(String value) {
+        return field.toJsonBuilder?.call('$value as ${field.type}') ?? value;
+      }
+
       buffer.writeln(
         '''
   ${data.queryReferenceInterfaceName} orderBy$titledNamed({
@@ -330,25 +345,25 @@ class ${data.queryReferenceImplName}
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [...queryCursor.startAt, ${serializeValue('startAt')}],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [...queryCursor.startAfter, ${serializeValue('startAfter')}],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [...queryCursor.endAt, ${serializeValue('endAt')}],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [...queryCursor.endBefore, ${serializeValue('endBefore')}],
         endBeforeDocumentSnapshot: null,
       );
     }

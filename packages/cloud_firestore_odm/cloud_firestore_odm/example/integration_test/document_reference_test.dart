@@ -157,6 +157,12 @@ void main() {
                   title: 'title',
                   year: 0,
                   id: '_',
+                  language: [LanguageType.english],
+                  certification: CertificationType.g,
+                  cast: [
+                    {CastType.cameo: ''}
+                  ],
+                  majorCast: {CastType.coStar: 'fooMan'},
                 ),
               );
 
@@ -265,6 +271,18 @@ void main() {
                   title: 'title',
                   year: 0,
                   id: '_',
+                  language: [LanguageType.english],
+                  certification: CertificationType.R,
+                  cast: [
+                    {
+                      CastType.coStar: 'William Shatner',
+                      CastType.cameo: 'Harlan Ellison'
+                    }
+                  ],
+                  majorCast: {
+                    CastType.coStar: 'William Shatner',
+                    CastType.cameo: 'Harlan Ellison'
+                  },
                 ),
               );
 
@@ -310,6 +328,18 @@ void main() {
                   title: 'title',
                   year: 0,
                   id: '_',
+                  language: [LanguageType.english],
+                  certification: CertificationType.R,
+                  cast: [
+                    {
+                      CastType.coStar: 'William Shatner',
+                      CastType.cameo: 'Harlan Ellison'
+                    }
+                  ],
+                  majorCast: {
+                    CastType.coStar: 'William Shatner',
+                    CastType.cameo: 'Harlan Ellison'
+                  },
                 ),
               );
 
@@ -465,6 +495,109 @@ void main() {
               .doc('123'),
         );
       });
+    });
+
+    group('enum documentReference', () {
+      test('enum set', () async {
+        await MovieCollectionReference().doc('123').set(
+              Movie(
+                genre: [],
+                likes: 42,
+                poster: 'foo',
+                rated: 'good',
+                runtime: 'runtime',
+                title: 'title',
+                year: 0,
+                language: [LanguageType.english, LanguageType.korean],
+                certification: CertificationType.R,
+                cast: [
+                  {
+                    CastType.coStar: 'William Shatner',
+                    CastType.cameo: 'Harlan Ellison'
+                  }
+                ],
+                majorCast: {
+                  CastType.coStar: 'William Shatner',
+                  CastType.cameo: 'Harlan Ellison'
+                },
+                id: '_',
+              ),
+            );
+
+        expect(
+          await MovieCollectionReference().doc('123').get().then((e) => e.data),
+          isA<Movie>()
+              .having((e) => e.genre, 'genre', isEmpty)
+              .having((e) => e.likes, 'likes', 42)
+              .having((e) => e.poster, 'poster', 'foo')
+              .having((e) => e.rated, 'rated', 'good')
+              .having((e) => e.runtime, 'runtime', 'runtime')
+              .having((e) => e.title, 'title', 'title')
+              .having((e) => e.year, 'year', 0)
+              .having(
+                (e) => e.certification,
+                'certification',
+                CertificationType.R,
+              ),
+        );
+      });
+
+      test(
+        'enum get with list',
+        () async {
+          await MovieCollectionReference().doc('123').set(
+                Movie(
+                  genre: [],
+                  likes: 42,
+                  poster: 'foo',
+                  rated: 'good',
+                  runtime: 'runtime',
+                  title: 'title',
+                  year: 0,
+                  language: [LanguageType.english, LanguageType.korean],
+                  certification: CertificationType.R,
+                  cast: [
+                    {
+                      CastType.coStar: 'William Shatner',
+                      CastType.cameo: 'Harlan Ellison'
+                    }
+                  ],
+                  majorCast: {
+                    CastType.coStar: 'William Shatner',
+                    CastType.cameo: 'Harlan Ellison'
+                  },
+                  id: '_',
+                ),
+              );
+
+          expect(
+            await MovieCollectionReference()
+                .doc('123')
+                .get()
+                .then((e) => e.data),
+            isA<Movie>()
+                .having((e) => e.genre, 'genre', isEmpty)
+                .having((e) => e.likes, 'likes', 42)
+                .having((e) => e.poster, 'poster', 'foo')
+                .having((e) => e.rated, 'rated', 'good')
+                .having((e) => e.runtime, 'runtime', 'runtime')
+                .having((e) => e.title, 'title', 'title')
+                .having((e) => e.year, 'year', 0)
+                .having(
+                  (e) => e.certification,
+                  'certification',
+                  CertificationType.R,
+                )
+                .having(
+              (e) => e.language,
+              'language',
+              [LanguageType.english, LanguageType.korean],
+            ),
+          );
+          // TODO implement enums in list context
+        },
+        skip: true,
+      );
     });
   });
 }

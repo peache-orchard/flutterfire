@@ -540,8 +540,8 @@ class _$ManualJsonQuery
         isGreaterThan: isGreaterThan,
         isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
         isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
+        whereIn: whereIn?.map((e) => e).toList(),
+        whereNotIn: whereNotIn?.map((e) => e).toList(),
       ),
       $queryCursor: $queryCursor,
     );
@@ -661,25 +661,25 @@ class _$ManualJsonQuery
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [...queryCursor.startAt, startAt as String],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [...queryCursor.startAfter, startAfter as String],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [...queryCursor.endAt, endAt as String],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [...queryCursor.endBefore, endBefore as String],
         endBeforeDocumentSnapshot: null,
       );
     }
@@ -962,11 +962,13 @@ class _$AdvancedJsonDocumentReference extends FirestoreDocumentReference<
     );
     final json = {
       if (firstName != _sentinel)
-        _$AdvancedJsonFieldMap['firstName']!: firstName as String?,
+        _$AdvancedJsonFieldMap['firstName']!:
+            _$AdvancedJsonPerFieldToJson.firstName(firstName as String?),
       if (firstNameFieldValue != null)
         _$AdvancedJsonFieldMap['firstName']!: firstNameFieldValue,
       if (lastName != _sentinel)
-        _$AdvancedJsonFieldMap['lastName']!: lastName as String?,
+        _$AdvancedJsonFieldMap['lastName']!:
+            _$AdvancedJsonPerFieldToJson.lastName(lastName as String?),
       if (lastNameFieldValue != null)
         _$AdvancedJsonFieldMap['lastName']!: lastNameFieldValue,
     };
@@ -991,11 +993,13 @@ class _$AdvancedJsonDocumentReference extends FirestoreDocumentReference<
     );
     final json = {
       if (firstName != _sentinel)
-        _$AdvancedJsonFieldMap['firstName']!: firstName as String?,
+        _$AdvancedJsonFieldMap['firstName']!:
+            _$AdvancedJsonPerFieldToJson.firstName(firstName as String?),
       if (firstNameFieldValue != null)
         _$AdvancedJsonFieldMap['firstName']!: firstNameFieldValue,
       if (lastName != _sentinel)
-        _$AdvancedJsonFieldMap['lastName']!: lastName as String?,
+        _$AdvancedJsonFieldMap['lastName']!:
+            _$AdvancedJsonPerFieldToJson.lastName(lastName as String?),
       if (lastNameFieldValue != null)
         _$AdvancedJsonFieldMap['lastName']!: lastNameFieldValue,
     };
@@ -1355,15 +1359,21 @@ class _$AdvancedJsonQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AdvancedJsonFieldMap['firstName']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isEqualTo: _$AdvancedJsonPerFieldToJson.firstName(isEqualTo),
+        isNotEqualTo: _$AdvancedJsonPerFieldToJson.firstName(isNotEqualTo),
+        isLessThan: _$AdvancedJsonPerFieldToJson.firstName(isLessThan),
+        isLessThanOrEqualTo:
+            _$AdvancedJsonPerFieldToJson.firstName(isLessThanOrEqualTo),
+        isGreaterThan: _$AdvancedJsonPerFieldToJson.firstName(isGreaterThan),
+        isGreaterThanOrEqualTo:
+            _$AdvancedJsonPerFieldToJson.firstName(isGreaterThanOrEqualTo),
         isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
+        whereIn: whereIn
+            ?.map((e) => _$AdvancedJsonPerFieldToJson.firstName(e))
+            .toList(),
+        whereNotIn: whereNotIn
+            ?.map((e) => _$AdvancedJsonPerFieldToJson.firstName(e))
+            .toList(),
       ),
       $queryCursor: $queryCursor,
     );
@@ -1384,15 +1394,21 @@ class _$AdvancedJsonQuery
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$AdvancedJsonFieldMap['lastName']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isEqualTo: _$AdvancedJsonPerFieldToJson.lastName(isEqualTo),
+        isNotEqualTo: _$AdvancedJsonPerFieldToJson.lastName(isNotEqualTo),
+        isLessThan: _$AdvancedJsonPerFieldToJson.lastName(isLessThan),
+        isLessThanOrEqualTo:
+            _$AdvancedJsonPerFieldToJson.lastName(isLessThanOrEqualTo),
+        isGreaterThan: _$AdvancedJsonPerFieldToJson.lastName(isGreaterThan),
+        isGreaterThanOrEqualTo:
+            _$AdvancedJsonPerFieldToJson.lastName(isGreaterThanOrEqualTo),
         isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
+        whereIn: whereIn
+            ?.map((e) => _$AdvancedJsonPerFieldToJson.lastName(e))
+            .toList(),
+        whereNotIn: whereNotIn
+            ?.map((e) => _$AdvancedJsonPerFieldToJson.lastName(e))
+            .toList(),
       ),
       $queryCursor: $queryCursor,
     );
@@ -1512,25 +1528,37 @@ class _$AdvancedJsonQuery
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [
+          ...queryCursor.startAt,
+          _$AdvancedJsonPerFieldToJson.firstName(startAt as String?)
+        ],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [
+          ...queryCursor.startAfter,
+          _$AdvancedJsonPerFieldToJson.firstName(startAfter as String?)
+        ],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [
+          ...queryCursor.endAt,
+          _$AdvancedJsonPerFieldToJson.firstName(endAt as String?)
+        ],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [
+          ...queryCursor.endBefore,
+          _$AdvancedJsonPerFieldToJson.firstName(endBefore as String?)
+        ],
         endBeforeDocumentSnapshot: null,
       );
     }
@@ -1584,25 +1612,37 @@ class _$AdvancedJsonQuery
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [
+          ...queryCursor.startAt,
+          _$AdvancedJsonPerFieldToJson.lastName(startAt as String?)
+        ],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [
+          ...queryCursor.startAfter,
+          _$AdvancedJsonPerFieldToJson.lastName(startAfter as String?)
+        ],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [
+          ...queryCursor.endAt,
+          _$AdvancedJsonPerFieldToJson.lastName(endAt as String?)
+        ],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [
+          ...queryCursor.endBefore,
+          _$AdvancedJsonPerFieldToJson.lastName(endBefore as String?)
+        ],
         endBeforeDocumentSnapshot: null,
       );
     }
@@ -1899,11 +1939,13 @@ class _$_PrivateAdvancedJsonDocumentReference
     );
     final json = {
       if (firstName != _sentinel)
-        _$PrivateAdvancedJsonFieldMap['firstName']!: firstName as String?,
+        _$PrivateAdvancedJsonFieldMap['firstName']!:
+            _$PrivateAdvancedJsonPerFieldToJson.firstName(firstName as String?),
       if (firstNameFieldValue != null)
         _$PrivateAdvancedJsonFieldMap['firstName']!: firstNameFieldValue,
       if (lastName != _sentinel)
-        _$PrivateAdvancedJsonFieldMap['lastName']!: lastName as String?,
+        _$PrivateAdvancedJsonFieldMap['lastName']!:
+            _$PrivateAdvancedJsonPerFieldToJson.lastName(lastName as String?),
       if (lastNameFieldValue != null)
         _$PrivateAdvancedJsonFieldMap['lastName']!: lastNameFieldValue,
     };
@@ -1928,11 +1970,13 @@ class _$_PrivateAdvancedJsonDocumentReference
     );
     final json = {
       if (firstName != _sentinel)
-        _$PrivateAdvancedJsonFieldMap['firstName']!: firstName as String?,
+        _$PrivateAdvancedJsonFieldMap['firstName']!:
+            _$PrivateAdvancedJsonPerFieldToJson.firstName(firstName as String?),
       if (firstNameFieldValue != null)
         _$PrivateAdvancedJsonFieldMap['firstName']!: firstNameFieldValue,
       if (lastName != _sentinel)
-        _$PrivateAdvancedJsonFieldMap['lastName']!: lastName as String?,
+        _$PrivateAdvancedJsonFieldMap['lastName']!:
+            _$PrivateAdvancedJsonPerFieldToJson.lastName(lastName as String?),
       if (lastNameFieldValue != null)
         _$PrivateAdvancedJsonFieldMap['lastName']!: lastNameFieldValue,
     };
@@ -2294,15 +2338,23 @@ class _$_PrivateAdvancedJsonQuery extends QueryReference<_PrivateAdvancedJson,
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$PrivateAdvancedJsonFieldMap['firstName']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isEqualTo: _$PrivateAdvancedJsonPerFieldToJson.firstName(isEqualTo),
+        isNotEqualTo:
+            _$PrivateAdvancedJsonPerFieldToJson.firstName(isNotEqualTo),
+        isLessThan: _$PrivateAdvancedJsonPerFieldToJson.firstName(isLessThan),
+        isLessThanOrEqualTo:
+            _$PrivateAdvancedJsonPerFieldToJson.firstName(isLessThanOrEqualTo),
+        isGreaterThan:
+            _$PrivateAdvancedJsonPerFieldToJson.firstName(isGreaterThan),
+        isGreaterThanOrEqualTo: _$PrivateAdvancedJsonPerFieldToJson
+            .firstName(isGreaterThanOrEqualTo),
         isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
+        whereIn: whereIn
+            ?.map((e) => _$PrivateAdvancedJsonPerFieldToJson.firstName(e))
+            .toList(),
+        whereNotIn: whereNotIn
+            ?.map((e) => _$PrivateAdvancedJsonPerFieldToJson.firstName(e))
+            .toList(),
       ),
       $queryCursor: $queryCursor,
     );
@@ -2323,15 +2375,23 @@ class _$_PrivateAdvancedJsonQuery extends QueryReference<_PrivateAdvancedJson,
       _collection,
       $referenceWithoutCursor: $referenceWithoutCursor.where(
         _$PrivateAdvancedJsonFieldMap['lastName']!,
-        isEqualTo: isEqualTo,
-        isNotEqualTo: isNotEqualTo,
-        isLessThan: isLessThan,
-        isLessThanOrEqualTo: isLessThanOrEqualTo,
-        isGreaterThan: isGreaterThan,
-        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isEqualTo: _$PrivateAdvancedJsonPerFieldToJson.lastName(isEqualTo),
+        isNotEqualTo:
+            _$PrivateAdvancedJsonPerFieldToJson.lastName(isNotEqualTo),
+        isLessThan: _$PrivateAdvancedJsonPerFieldToJson.lastName(isLessThan),
+        isLessThanOrEqualTo:
+            _$PrivateAdvancedJsonPerFieldToJson.lastName(isLessThanOrEqualTo),
+        isGreaterThan:
+            _$PrivateAdvancedJsonPerFieldToJson.lastName(isGreaterThan),
+        isGreaterThanOrEqualTo: _$PrivateAdvancedJsonPerFieldToJson
+            .lastName(isGreaterThanOrEqualTo),
         isNull: isNull,
-        whereIn: whereIn,
-        whereNotIn: whereNotIn,
+        whereIn: whereIn
+            ?.map((e) => _$PrivateAdvancedJsonPerFieldToJson.lastName(e))
+            .toList(),
+        whereNotIn: whereNotIn
+            ?.map((e) => _$PrivateAdvancedJsonPerFieldToJson.lastName(e))
+            .toList(),
       ),
       $queryCursor: $queryCursor,
     );
@@ -2452,25 +2512,37 @@ class _$_PrivateAdvancedJsonQuery extends QueryReference<_PrivateAdvancedJson,
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [
+          ...queryCursor.startAt,
+          _$PrivateAdvancedJsonPerFieldToJson.firstName(startAt as String?)
+        ],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [
+          ...queryCursor.startAfter,
+          _$PrivateAdvancedJsonPerFieldToJson.firstName(startAfter as String?)
+        ],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [
+          ...queryCursor.endAt,
+          _$PrivateAdvancedJsonPerFieldToJson.firstName(endAt as String?)
+        ],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [
+          ...queryCursor.endBefore,
+          _$PrivateAdvancedJsonPerFieldToJson.firstName(endBefore as String?)
+        ],
         endBeforeDocumentSnapshot: null,
       );
     }
@@ -2525,25 +2597,37 @@ class _$_PrivateAdvancedJsonQuery extends QueryReference<_PrivateAdvancedJson,
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, startAt],
+        startAt: [
+          ...queryCursor.startAt,
+          _$PrivateAdvancedJsonPerFieldToJson.lastName(startAt as String?)
+        ],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfter: [
+          ...queryCursor.startAfter,
+          _$PrivateAdvancedJsonPerFieldToJson.lastName(startAfter as String?)
+        ],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, endAt],
+        endAt: [
+          ...queryCursor.endAt,
+          _$PrivateAdvancedJsonPerFieldToJson.lastName(endAt as String?)
+        ],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, endBefore],
+        endBefore: [
+          ...queryCursor.endBefore,
+          _$PrivateAdvancedJsonPerFieldToJson.lastName(endBefore as String?)
+        ],
         endBeforeDocumentSnapshot: null,
       );
     }
@@ -3256,6 +3340,9 @@ EmptyModel _$EmptyModelFromJson(Map<String, dynamic> json) => EmptyModel();
 
 const _$EmptyModelFieldMap = <String, String>{};
 
+// ignore: unused_element
+abstract class _$EmptyModelPerFieldToJson {}
+
 Map<String, dynamic> _$EmptyModelToJson(EmptyModel instance) =>
     <String, dynamic>{};
 
@@ -3268,6 +3355,14 @@ const _$AdvancedJsonFieldMap = <String, String>{
   'firstName': 'first_name',
   'lastName': 'LAST_NAME',
 };
+
+// ignore: unused_element
+abstract class _$AdvancedJsonPerFieldToJson {
+  // ignore: unused_element
+  static Object? firstName(String? instance) => instance;
+  // ignore: unused_element
+  static Object? lastName(String? instance) => instance;
+}
 
 Map<String, dynamic> _$AdvancedJsonToJson(AdvancedJson instance) =>
     <String, dynamic>{
@@ -3285,6 +3380,14 @@ const _$PrivateAdvancedJsonFieldMap = <String, String>{
   'firstName': 'first_name',
   'lastName': 'LAST_NAME',
 };
+
+// ignore: unused_element
+abstract class _$PrivateAdvancedJsonPerFieldToJson {
+  // ignore: unused_element
+  static Object? firstName(String? instance) => instance;
+  // ignore: unused_element
+  static Object? lastName(String? instance) => instance;
+}
 
 Map<String, dynamic> _$PrivateAdvancedJsonToJson(
         _PrivateAdvancedJson instance) =>

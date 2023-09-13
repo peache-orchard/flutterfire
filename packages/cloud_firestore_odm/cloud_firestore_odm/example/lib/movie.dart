@@ -8,6 +8,63 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'movie.g.dart';
 
+enum LanguageType { english, french, spanish, chinese, korean }
+
+enum GenreType {
+  @JsonValue('action')
+  action,
+  @JsonValue('adventure')
+  adventure,
+  @JsonValue('comedy')
+  comedy,
+  @JsonValue('crime')
+  crime,
+  @JsonValue('drame')
+  drame,
+  @JsonValue('fantasy')
+  fantasy,
+  @JsonValue('mystery')
+  mystery,
+  @JsonValue('sciFi')
+  sciFi,
+  @JsonValue('thriler')
+  thriler,
+}
+
+enum CertificationType {
+  @JsonValue('none')
+  none,
+  @JsonValue('g')
+  g,
+  @JsonValue('pg')
+  pg,
+  @JsonValue('pg13')
+  pg13,
+  @JsonValue('R')
+  R,
+  @JsonValue('tvpg')
+  tvpg,
+  @JsonValue('tvma')
+  tvma,
+}
+
+enum CastType {
+  @JsonValue('background')
+  background,
+  @JsonValue('cameo')
+  cameo,
+  @JsonValue('recurring')
+  recurring,
+  @JsonValue('side')
+  side,
+  @JsonValue('star')
+  star,
+  @JsonValue('coStar')
+  coStar,
+  @JsonValue('guestStar')
+  guestStar,
+}
+
 @JsonSerializable()
 class Movie {
   Movie({
@@ -19,6 +76,10 @@ class Movie {
     required this.title,
     required this.year,
     required this.id,
+    required this.language,
+    required this.certification,
+    required this.cast,
+    required this.majorCast,
   }) {
     _$assertMovie(this);
   }
@@ -34,6 +95,10 @@ class Movie {
   final String runtime;
   final String rated;
   final List<String>? genre;
+  final List<LanguageType>? language;
+  final CertificationType certification;
+  final List<Map<CastType, String>> cast;
+  final Map<CastType, String> majorCast;
 }
 
 @Collection<Movie>('firestore-example-app')
