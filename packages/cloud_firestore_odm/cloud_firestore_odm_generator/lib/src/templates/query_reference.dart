@@ -345,25 +345,25 @@ class ${data.queryReferenceImplName}
 
     if (startAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAt: [...queryCursor.startAt, ${serializeValue('startAt')}],
+        startAt: [...queryCursor.startAt, startAt],
         startAtDocumentSnapshot: null,
       );
     }
     if (startAfter != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        startAfter: [...queryCursor.startAfter, ${serializeValue('startAfter')}],
+        startAfter: [...queryCursor.startAfter, startAfter],
         startAfterDocumentSnapshot: null,
       );
     }
     if (endAt != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endAt: [...queryCursor.endAt, ${serializeValue('endAt')}],
+        endAt: [...queryCursor.endAt, endAt],
         endAtDocumentSnapshot: null,
       );
     }
     if (endBefore != _sentinel) {
       queryCursor = queryCursor.copyWith(
-        endBefore: [...queryCursor.endBefore, ${serializeValue('endBefore')}],
+        endBefore: [...queryCursor.endBefore, endBefore],
         endBeforeDocumentSnapshot: null,
       );
     }
